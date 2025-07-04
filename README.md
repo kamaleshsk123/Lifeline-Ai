@@ -17,8 +17,8 @@ Follow these steps to get the project up and running on your local machine.
 If you haven't already, clone your project from GitHub:
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
-cd <YOUR_PROJECT_DIRECTORY>
+git clone https://github.com/kamaleshsk123/Lifeline-Ai.git
+cd Lifeline-Ai.git
 ```
 
 ### 2. Install Dependencies
