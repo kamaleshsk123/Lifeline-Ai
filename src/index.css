@@ -9,8 +9,8 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -80,4 +80,21 @@ body {
 
 .bg-gradient-secondary {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+[data-theme="dark"] .p-toast-message {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.3),
+    rgba(15, 23, 42, 0.2)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .p-toast-message .p-toast-icon,
+[data-theme="dark"] .p-toast-message .p-toast-summary,
+[data-theme="dark"] .p-toast-message .p-toast-detail {
+  color: inherit;
 }

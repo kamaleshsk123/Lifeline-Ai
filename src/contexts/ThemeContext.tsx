@@ -16,12 +16,21 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved !== null ? JSON.parse(saved) : false;
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem('darkMode');
-    if (saved) {
-      setIsDark(JSON.parse(saved));
+    if (saved !== null) {
+      const parsed = JSON.parse(saved);
+      setIsDark(parsed);
+      if (parsed) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     }
   }, []);
 
