@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MessageSquare, Heart, ExternalLink } from 'lucide-react';
+import { X, Phone, MessageSquare, Heart, ExternalLink, Eye, Ear, Hand, Wind, Smile } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 
 const CrisisModal: React.FC = () => {
@@ -100,6 +100,67 @@ const CrisisModal: React.FC = () => {
         >
           {isRunning ? 'Stop' : 'Start Exercise'}
         </button>
+      </div>
+    );
+  };
+
+  const GroundingExercise = () => {
+    const [step, setStep] = React.useState(0);
+    const steps = [
+      { count: 5, label: 'things you can see', icon: <Eye className="h-8 w-8 text-purple-600" /> },
+      { count: 4, label: 'things you can touch', icon: <Hand className="h-8 w-8 text-green-600" /> },
+      { count: 3, label: 'things you can hear', icon: <Ear className="h-8 w-8 text-yellow-600" /> },
+      { count: 2, label: 'things you can smell', icon: <Wind className="h-8 w-8 text-orange-600" /> },
+      { count: 1, label: 'thing you can taste', icon: <Smile className="h-8 w-8 text-pink-600" /> },
+    ];
+
+    return (
+      <div className="text-center p-6 bg-purple-50 dark:bg-purple-900 rounded-2xl">
+        <h3 className="text-xl font-bold text-purple-800 dark:text-purple-200 mb-4">
+          5-4-3-2-1 Grounding Technique
+        </h3>
+        <div className="mb-6">
+          {step < steps.length ? (
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center"
+            >
+              <div className="mb-4">{steps[step].icon}</div>
+              <div className="text-4xl font-bold text-purple-600 dark:text-purple-300 mb-2">
+                {steps[step].count}
+              </div>
+              <div className="text-xl font-bold text-purple-800 dark:text-purple-200">
+                {steps[step].label}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-xl font-bold text-purple-800 dark:text-purple-200"
+            >
+              Exercise Complete! You are grounded.
+            </motion.div>
+          )}
+        </div>
+        <div className="flex justify-center space-x-4">
+          {step < steps.length && (
+            <button
+              onClick={() => setStep(prev => prev + 1)}
+              className="bg-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-purple-700 transition-colors"
+            >
+              Next
+            </button>
+          )}
+          <button
+            onClick={() => setStep(0)}
+            className="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
+          >
+            Restart
+          </button>
+        </div>
       </div>
     );
   };
@@ -209,6 +270,9 @@ const CrisisModal: React.FC = () => {
               {/* Breathing Exercise */}
               <BreathingExercise />
 
+              {/* Grounding Exercise */}
+              <GroundingExercise />
+
               {/* Additional Resources */}
               <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-xl p-4">
                 <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">
@@ -218,6 +282,7 @@ const CrisisModal: React.FC = () => {
                   <li>• You are not alone in this</li>
                   <li>• Your feelings are valid</li>
                   <li>• This moment will pass</li>
+                  <li>• You have survived difficult times before</li>
                   <li>• You have survived difficult times before</li>
                   <li>• Help is available and you deserve support</li>
                 </ul>
