@@ -66,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${item.className} ${
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${item.className}-desktop ${
                   location.pathname === item.path
                     ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -92,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${item.className} ${
+              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${item.className}-mobile ${
                 location.pathname === item.path
                   ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-500 dark:text-gray-400'

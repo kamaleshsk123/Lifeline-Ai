@@ -11,24 +11,24 @@ const Tour: React.FC<TourProps> = ({ runTour, setRunTour }) => {
   const { isDark } = useTheme();
   const [steps, setSteps] = useState<Step[]>([
     {
-      target: '.chat-nav-item', // Assuming you'll add a class to your chat nav link
+      target: '.chat-nav-item-desktop', 
       content: 'This is your AI chat companion. Ask anything!',
       disableBeacon: true,
     },
     {
-      target: '.mood-nav-item', // Assuming you'll add a class to your mood nav link
+      target: '.mood-nav-item-desktop',
       content: 'Track your daily mood and see trends here.',
     },
     {
-      target: '.journal-nav-item', // Assuming you'll add a class to your journal nav link
+      target: '.journal-nav-item-desktop',
       content: 'Write down your thoughts and feelings in your private journal.',
     },
     {
-      target: '.goals-nav-item', // Assuming you'll add a class to your goals nav link
+      target: '.goals-nav-item-desktop',
       content: 'Set and achieve your personal goals.',
     },
     {
-      target: '.crisis-button', // Assuming you'll add a class to your crisis button
+      target: '.crisis-button', // This is shared/handled separately or needs similar treatment if duplicated
       content: 'In times of need, access immediate crisis support.',
     },
   ]);
