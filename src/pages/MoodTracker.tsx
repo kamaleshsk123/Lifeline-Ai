@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { useData } from '../contexts/DataContext';
 import { format, subDays, eachDayOfInterval } from 'date-fns';
+import Insights from '../components/Insights';
 
 ChartJS.register(
   CategoryScale,
@@ -189,6 +190,11 @@ const MoodTracker: React.FC = () => {
           <div className="h-64">
             <Line data={chartData} options={chartOptions} />
           </div>
+        </div>
+
+        {/* Insights */}
+        <div className="mb-8">
+          <Insights />
         </div>
 
         {/* Recent Entries */}

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Heart } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Message {
   id: string;
@@ -30,10 +31,30 @@ const Chat: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const [aiPersona, setAiPersona] = useState(() => {
+    return localStorage.getItem('aiPersona') || 'supportive';
+  });
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem('aiPersona', aiPersona);
+  }, [aiPersona]);
+
+  const getSystemMessage = (persona: string) => {
+    switch (persona) {
+      case 'supportive':
+        return "You are LifeLine, a supportive and empathetic AI companion. Your goal is to listen, offer encouragement, and provide helpful, gentle guidance.";
+      case 'direct':
+        return "You are LifeLine, a direct and concise AI companion. Provide clear, actionable advice and get straight to the point.";
+      case 'humorous':
+        return "You are LifeLine, a lighthearted and humorous AI companion. Use wit and gentle jokes to uplift the user, while still being helpful.";
+      default:
+        return "You are LifeLine, a supportive and empathetic AI companion. Your goal is to listen, offer encouragement, and provide helpful, gentle guidance.";
+    }
+  };
 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
@@ -54,6 +75,8 @@ const Chat: React.FC = () => {
       content: msg.text,
     }));
 
+    const systemMessage = { role: 'system', content: getSystemMessage(aiPersona) };
+
     try {
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -63,7 +86,7 @@ const Chat: React.FC = () => {
         },
         body: JSON.stringify({
           "model": OPENROUTER_MODEL,
-          "messages": [...history, { role: 'user', content: text }]
+          "messages": [systemMessage, ...history, { role: 'user', content: text }]
         })
       });
 
@@ -105,13 +128,26 @@ const Chat: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex items-center space-x-3">
-        <div className="flex items-center space-x-2">
+      <div className="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
           <Heart className="h-8 w-8 text-pink-500" />
           <div>
             <h1 className="text-xl font-bold text-gray-800 dark:text-white">LifeLine AI</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">Your supportive companion</p>
           </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <label htmlFor="ai-persona" className="text-sm text-gray-600 dark:text-gray-300">AI Persona:</label>
+          <Select value={aiPersona} onValueChange={setAiPersona}>
+            <SelectTrigger id="ai-persona" className="w-[180px]">
+              <SelectValue placeholder="Select a persona" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="supportive">Supportive</SelectItem>
+              <SelectItem value="direct">Direct</SelectItem>
+              <SelectItem value="humorous">Humorous</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, MessageCircle, BarChart3, BookOpen, Settings, AlertTriangle } from 'lucide-react';
+import { Heart, MessageCircle, BarChart3, BookOpen, Settings, AlertTriangle, Target } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
+import Tour from './Tour';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,12 +11,21 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const { setCrisisModalOpen } = useData();
+  const [runTour, setRunTour] = useState(false);
+
+  useEffect(() => {
+    const hasCompletedTour = localStorage.getItem('hasCompletedTour');
+    if (!hasCompletedTour) {
+      setRunTour(true);
+    }
+  }, []);
 
   const navItems = [
-    { path: '/app', icon: MessageCircle, label: 'Chat' },
-    { path: '/mood', icon: BarChart3, label: 'Mood' },
-    { path: '/journal', icon: BookOpen, label: 'Journal' },
-    { path: '/settings', icon: Settings, label: 'Settings' }
+    { path: '/app', icon: MessageCircle, label: 'Chat', className: 'chat-nav-item' },
+    { path: '/mood', icon: BarChart3, label: 'Mood', className: 'mood-nav-item' },
+    { path: '/journal', icon: BookOpen, label: 'Journal', className: 'journal-nav-item' },
+    { path: '/goals', icon: Target, label: 'Goals', className: 'goals-nav-item' },
+    { path: '/settings', icon: Settings, label: 'Settings', className: 'settings-nav-item' }
   ];
 
   return (
@@ -28,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <button
           onClick={() => setCrisisModalOpen(true)}
-          className="bg-red-500 text-white px-3 py-1 rounded-full text-sm flex items-center space-x-1 hover:bg-red-600 transition-colors"
+          className="bg-red-500 text-white px-3 py-1 rounded-full text-sm flex items-center space-x-1 hover:bg-red-600 transition-colors crisis-button"
         >
           <AlertTriangle className="h-4 w-4" />
           <span>Crisis</span>
@@ -45,7 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           
           <button
             onClick={() => setCrisisModalOpen(true)}
-            className="w-full bg-red-500 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center space-x-2 hover:bg-red-600 transition-colors mb-6"
+            className="w-full bg-red-500 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center space-x-2 hover:bg-red-600 transition-colors mb-6 crisis-button"
           >
             <AlertTriangle className="h-5 w-5" />
             <span>Crisis Support</span>
@@ -56,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${item.className}-desktop ${
                   location.pathname === item.path
                     ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -82,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${
+              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${item.className}-mobile ${
                 location.pathname === item.path
                   ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-500 dark:text-gray-400'
@@ -94,6 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           ))}
         </div>
       </nav>
+      <Tour runTour={runTour} setRunTour={setRunTour} />
     </div>
   );
 };

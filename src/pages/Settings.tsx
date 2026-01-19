@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { User, Moon, Sun, Shield, Trash2, LogOut, Save } from "lucide-react";
+import { User, Moon, Sun, Shield, Trash2, LogOut, Save, Award, Bell } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import CustomToast, { useToast } from "../components/CustomToast";
+import Badges from "../components/Badges";
 
 const Settings: React.FC = () => {
   const { user, logout, updateUserProfile } = useAuth();
@@ -11,6 +12,20 @@ const Settings: React.FC = () => {
   const { toasts, showToast, removeToast } = useToast();
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [moodReminderEnabled, setMoodReminderEnabled] = useState(() => {
+    return localStorage.getItem('moodReminderEnabled') === 'true';
+  });
+  const [journalPromptEnabled, setJournalPromptEnabled] = useState(() => {
+    return localStorage.getItem('journalPromptEnabled') === 'true';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('moodReminderEnabled', String(moodReminderEnabled));
+  }, [moodReminderEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('journalPromptEnabled', String(journalPromptEnabled));
+  }, [journalPromptEnabled]);
 
   const handleSaveProfile = async () => {
     try {
@@ -105,6 +120,9 @@ const Settings: React.FC = () => {
             </div>
           </div>
 
+          {/* Badges Section */}
+          <Badges />
+
           {/* Appearance Settings */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center space-x-3 mb-6">
@@ -138,6 +156,62 @@ const Settings: React.FC = () => {
                   }`}
                 />
               </button>
+            </div>
+          </div>
+
+          {/* Notification Settings */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <Bell className="h-6 w-6 text-orange-600" />
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+                Notifications
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-gray-800 dark:text-white">
+                    Mood Logging Reminders
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Get daily reminders to log your mood.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setMoodReminderEnabled(!moodReminderEnabled)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    moodReminderEnabled ? "bg-blue-600" : "bg-gray-200"
+                  }`}>
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      moodReminderEnabled ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-gray-800 dark:text-white">
+                    Journal Prompts
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Receive prompts to inspire your journal entries.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setJournalPromptEnabled(!journalPromptEnabled)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    journalPromptEnabled ? "bg-blue-600" : "bg-gray-200"
+                  }`}>
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      journalPromptEnabled ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
           </div>
 

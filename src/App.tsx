@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -9,11 +9,27 @@ import Chat from './pages/Chat';
 import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
 import Settings from './pages/Settings';
+import Goals from './pages/Goals';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import CrisisModal from './components/CrisisModal';
+import Onboarding from './components/Onboarding';
 
 function App() {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingClose = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('hasSeenOnboarding', 'true');
+  };
+
   return (
     <AuthProvider>
       <ThemeProvider>
@@ -44,6 +60,13 @@ function App() {
                     </Layout>
                   </ProtectedRoute>
                 } />
+                <Route path="/goals" element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Goals />
+                    </Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/settings" element={
                   <ProtectedRoute>
                     <Layout>
@@ -53,6 +76,7 @@ function App() {
                 } />
               </Routes>
               <CrisisModal />
+              <Onboarding isOpen={showOnboarding} onClose={handleOnboardingClose} />
             </div>
           </Router>
         </DataProvider>
